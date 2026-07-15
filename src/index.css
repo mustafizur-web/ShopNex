@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-fixed: #8B5CF6;
+  --color-secondary: #00E5FF;
+  --color-on-secondary: #ffffff;
+  --color-background: #FFFFFF;
+  --color-on-background: #0F172A;
+  --color-surface: #FFFFFF;
+  --color-on-surface: #0F172A;
+  --color-surface-variant: #F8FAFC;
+  --color-on-surface-variant: #475569;
+  --color-outline: #CBD5E1;
+  --color-outline-variant: #E2E8F0;
+  --color-secondary-container: #E2E8F0;
+  --color-on-secondary-container: #0F172A;
+  --color-surface-container-low: #F8FAFC;
+  --color-error: #EF4444;
+  
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@utility glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+@utility center-out-underline {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 50%;
+    background: var(--color-primary-fixed);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+  &:hover::after {
+    width: 100%;
+  }
+}
+
+@utility btn-primary {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary-fixed) 100%);
+  color: #FFFFFF;
+  background-size: 200% auto;
+  box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  &:hover {
+    box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
+    transform: translateY(-2px);
+    background-position: right center;
+  }
+}
+
+@utility btn-outline {
+  background: transparent;
+  color: var(--color-primary-fixed);
+  border: 1px solid var(--color-primary-fixed);
+  transition: all 0.2s ease;
+  &:hover {
+    background: rgba(15, 23, 42, 0.05);
+  }
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  @apply antialiased overflow-x-hidden font-sans;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-outline);
+  border-radius: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-fixed);
+}

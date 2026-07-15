@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidFileAsset(data) {
+      return data.keys().hasAll(['userId', 'name', 'size', 'createdAt']) &&
+             data.userId is string && data.userId.size() <= 128 && data.userId == request.auth.uid &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 200 &&
+             data.size is number && data.size >= 0 && data.size <= 524288 && // 500KB demo limit
+             (data.get('type', '') is string) &&
+             (data.get('url', '') is string) &&
+             (data.createdAt == request.time);
+    }
+
+    match /files/{fileId} {
+      // Must be owner to list/get
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && isValidId(fileId) && resource.data.userId == request.auth.uid;
+      
+      // Must follow schema and be user's own file
+      allow create: if isSignedIn() && isValidId(fileId) && isValidFileAsset(incoming());
+      
+      // We don't allow updates to files metadata for this demo
+      allow update: if false;
+      
+      allow delete: if isSignedIn() && isValidId(fileId) && resource.data.userId == request.auth.uid;
+    }
+  }
+}

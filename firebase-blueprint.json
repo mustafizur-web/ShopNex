@@ -1,0 +1,37 @@
+{
+  "entities": {
+    "FileAsset": {
+      "title": "File Asset",
+      "description": "A file uploaded by a user.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "User ID of the owner"
+        },
+        "name": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        }
+      },
+      "required": ["userId", "name", "size", "createdAt"]
+    }
+  },
+  "firestore": {
+    "files/{fileId}": {
+      "schema": "FileAsset",
+      "description": "Stores user uploaded files metadata."
+    }
+  }
+}
